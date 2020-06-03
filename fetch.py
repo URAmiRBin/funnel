@@ -1,9 +1,8 @@
 import argparse
 import pandas as pd
 
-
 def fetch_column(raw_csv, column_name):
-    df = pd.read_csv(raw_csv)
+    df = pd.read_csv(raw_csv, encoding='utf8')
     return df[column_name]
 
 if __name__ == "__main__":
@@ -12,5 +11,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
     raw_csv = args.address
     urls = fetch_column(raw_csv, 'url')
-    print(urls[0])
-
