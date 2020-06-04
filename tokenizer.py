@@ -1,4 +1,5 @@
 import re
+from normalizer import normilize
 
 def cleanup(contents):
     for i in range(len(contents)):
@@ -7,7 +8,7 @@ def cleanup(contents):
         contents[i] = re.sub('\u200f', ' ', contents[i])
         contents[i] = re.sub('\n', ' ', contents[i])
         contents[i] = re.sub(r'\&.+;', ' ',contents[i])
-        contents[i] = re.sub('[؟.)();:!/،,;۲۶۷۵۰۳۴۸۱۹؛]', '', contents[i])
+        contents[i] = re.sub('[؟.)();:!/،,;۲۶۷۵۰۳۴۸۱۹؛1234567890]', '', contents[i])
         contents[i] = re.sub(' +', ' ', contents[i])
     return contents
 
@@ -23,6 +24,12 @@ def simple_tokenize(contents):
         tokens.remove(word)
     return tokens
 
+def pro_tokenizer(contents):
+    contents = cleanup(contents)
+    normal_contents = normalize(contents)
+
 def tokenize(tokenizer_type, contents):
     if tokenizer_type == 'simple':
         return simple_tokenize(contents)
+    elif tokenizer_type == 'pro':
+        return pro_tokenizer(contents)

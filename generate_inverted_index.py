@@ -7,8 +7,8 @@ def build_inverted_index(docs, tokens):
     inv_index = {}
     for token in tokens:
         inv_index[token] = [0]
-    for i in range(100):
-        for j in range(500):
+    for i in range(len(docs)):
+        for j in range(len(tokens)):
             if tokens[j] in docs[i]:
                 inv_index[tokens[j]][0] += 1
                 inv_index[tokens[j]].append(i)
@@ -24,6 +24,6 @@ if __name__ == "__main__":
     contents = fetch_column(csv_address, 'content')
     tokens = tokenize(tokenize_type, contents)
     inverted_index = build_inverted_index(contents, tokens)
-    w = csv.writer(open("inverted_index.csv", "w"))
+    w = csv.writer(open("inverted_index.csv", "w", encoding='utf-8'))
     for key, val in inverted_index.items():
         w.writerow([key, val])
