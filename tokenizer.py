@@ -12,7 +12,7 @@ def tokenize_by_space(contents):
 def generate_verb_dictionary():
     verbDic = []
     result = []
-    resourceName = os.path.dirname(__file__) + "/PersianStemmerLib/data/VerbList.fa"
+    resourceName = os.path.dirname(__file__) + "/PersianStemmerLib/data/FreqVerbList.fa"
     with open(resourceName, 'r', encoding="utf-8") as reader:
         result = [line.strip("\r\n ") for line in reader if line.strip("\r\n ")]
     lines = result

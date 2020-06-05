@@ -28,7 +28,7 @@ def cleanup(contents):
         contents[i] = re.sub('{.*?}', ' ', contents[i])
         contents[i] = re.sub('\u200f', ' ', contents[i])
         contents[i] = re.sub(r'\&.+;', ' ',contents[i])
-        contents[i] = re.sub('[؟.();}@_=:!$%^&/،,;۲۶۷۵۰{۳۴۸۱۹؛1234567890]', '', contents[i])
+        contents[i] = re.sub('[؟.();}@_=:!$%^+&/،,;۲۶١٢۷۵۰{۳۴۸٨۱۹؛1234567890]', '', contents[i])
         contents[i] = re.sub('[a-zA-Z]', '', contents[i])
         contents[i] = re.sub('\u200c', ' ', contents[i])
         contents[i] = re.sub('\-', ' ', contents[i])

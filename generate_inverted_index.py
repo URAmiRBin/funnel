@@ -46,7 +46,7 @@ if __name__ == "__main__":
         ]
     else:
         contents = fetch_column(csv_address, 'content')
-    tokens = tokenize(tokenize_type, contents2)
+    tokens = tokenize(tokenize_type, contents)
     if tokenize_type == 'pro':
         tokens = normilize(tokens)
         tokens = stem_list(tokens)
