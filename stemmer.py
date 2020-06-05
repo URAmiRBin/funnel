@@ -4,5 +4,6 @@ from PersianStemmerLib import PersianStemmer
 def stem_list(words_list):
     ps = PersianStemmer()
     for i in range(len(words_list)):
-        words_list[i] = ps.run(words_list[i])
+        for j in range(len(words_list[i])):
+            words_list[i][j] = ps.run(words_list[i][j])
     return words_list
