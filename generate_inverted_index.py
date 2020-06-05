@@ -46,13 +46,9 @@ if __name__ == "__main__":
         ]
     else:
         contents = fetch_column(csv_address, 'content')
-    tokens = tokenize(tokenize_type, contents)
+    tokens = tokenize(tokenize_type, contents2)
     if tokenize_type == 'pro':
         tokens = normilize(tokens)
         tokens = stem_list(tokens)
     dictionary = build_dictionary(tokens)
     inverted_index = build_inverted_index(tokens, dictionary)
-    print(inverted_index)
-    # w = csv.writer(open("inverted_index.csv", "w", encoding='utf-8'))
-    # for key, val in inverted_index.items():
-    #     w.writerow([key, val])

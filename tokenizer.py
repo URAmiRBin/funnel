@@ -7,12 +7,6 @@ def tokenize_by_space(contents):
     tokens = []
     for content in contents:
         tokens.append(content.split(" "))
-    for t in tokens:
-        if ' ' in t:
-            t.remove(' ')
-        if '' in t:
-            t.remove('')
-        t = list(dict.fromkeys(t))
     return tokens
 
 def generate_verb_dictionary():
@@ -71,7 +65,7 @@ def tokenize_look_ahead(contents):
     return tokens
 
 def remove_frequent_tokens(tokens):
-    frequent_words = ["در", "برای", "چون", "است", "مانند", "باید", "به", "با", "از", "بی", "تا"]
+    frequent_words = ["در", "برای", "چون", "است", "مانند", "باید", "به", "با", "از", "بی", "تا", "این"]
     for i in range(len(tokens)):
         for word in frequent_words:
             if word in tokens[i]:
@@ -92,6 +86,13 @@ def pro_tokenizer(contents):
 
 def tokenize(tokenizer_type, contents):
     if tokenizer_type == 'simple':
-        return simple_tokenize(contents)
+        tokens = simple_tokenize(contents)
     elif tokenizer_type == 'pro':
-        return pro_tokenizer(contents)
+        tokens = pro_tokenizer(contents)
+    for i in range(len(tokens)):
+        if ' ' in tokens[i]:
+            tokens[i].remove(' ')
+        if '' in tokens[i]:
+            tokens[i].remove('')
+        tokens[i] = list(dict.fromkeys(tokens[i]))
+    return tokens

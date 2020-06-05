@@ -1,4 +1,5 @@
 import re
+from fetch import fetch_column
 
 def normilize(contents):
     for i in range(len(contents)):
@@ -24,10 +25,13 @@ def normilize(contents):
 def cleanup(contents):
     for i in range(len(contents)):
         contents[i] = re.sub('<.*?>', ' ', contents[i])
+        contents[i] = re.sub('{.*?}', ' ', contents[i])
         contents[i] = re.sub('\u200f', ' ', contents[i])
-        contents[i] = re.sub('\n', ' ', contents[i])
         contents[i] = re.sub(r'\&.+;', ' ',contents[i])
-        contents[i] = re.sub('[؟.)();:!/،,;۲۶۷۵۰۳۴۸۱۹؛1234567890]', '', contents[i])
+        contents[i] = re.sub('[؟.();}@_=:!$%^&/،,;۲۶۷۵۰{۳۴۸۱۹؛1234567890]', '', contents[i])
+        contents[i] = re.sub('[a-zA-Z]', '', contents[i])
         contents[i] = re.sub('\u200c', ' ', contents[i])
+        contents[i] = re.sub('\-', ' ', contents[i])
+        contents[i] = contents[i].replace('\n', ' ')
         contents[i] = re.sub(' +', ' ', contents[i])
     return contents
