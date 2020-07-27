@@ -2,6 +2,8 @@ from tokenizer import tokenize
 from normalizer import normilize
 from stemmer import stem_list
 from fetch import fetch_column
+from tfidf import tf_idf, querySimilarity
+from Heap import Heap
 import argparse
 import csv
 import codecs
@@ -64,3 +66,20 @@ if __name__ == "__main__":
         tokens = stem_list(tokens)
     dictionary = build_dictionary(tokens)
     inverted_index = build_inverted_index(tokens, dictionary)
+
+    queryw = tf_idf(['خون', 'انتقال'], inverted_index)
+
+    h = Heap()    
+
+    for i in range(len(tokens)):
+        docw = tf_idf(tokens[i], inverted_index)
+        sim = querySimilarity(queryw, docw)
+        if sim != 0:
+            h.addnSort([i, sim])
+
+    k = 10
+    result = h.getFirstK(k)
+    titles = fetch_column(csv_address, 'title')
+    for i in range(k):
+        print(titles[result[i][0]])
+
