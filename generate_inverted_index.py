@@ -4,6 +4,7 @@ from stemmer import stem_list
 from fetch import fetch_column
 import argparse
 import csv
+import codecs
 
 def build_inverted_index(docs, dic):
     inv_index = {}
@@ -23,6 +24,17 @@ def build_dictionary(tokens):
     dic = list(dict.fromkeys(dic))
     return dic
 
+
+def writeIndex(dic):
+    keys = list(dic.keys())
+    f = codecs.open("Inverted Index.txt", "w", "utf-8")
+    for i in range(len(keys)):
+        f.write(keys[i])
+        f.write(",")
+        temp = dic.get(keys[i])
+        f.write(str(temp[0]))
+        f.write("\n")
+    f.close()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate Inverted Index')
