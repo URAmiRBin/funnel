@@ -2,11 +2,10 @@ from tokenizer import tokenize
 from normalizer import normilize
 from stemmer import stem_list
 from fetch import fetch_column
-from tfidf import tf_idf, querySimilarity
-from Heap import Heap
+from tfidf import tf_idf
 import argparse
+import pickle
 import csv
-import codecs
 
 def build_inverted_index(docs, dic):
     inv_index = {}
@@ -27,16 +26,10 @@ def build_dictionary(tokens):
     return dic
 
 
-def writeIndex(dic):
-    keys = list(dic.keys())
-    f = codecs.open("Inverted Index.txt", "w", "utf-8")
-    for i in range(len(keys)):
-        f.write(keys[i])
-        f.write(",")
-        temp = dic.get(keys[i])
-        f.write(str(temp[0]))
-        f.write("\n")
-    f.close()
+def writeObj(name, dic, tType, address):
+    with open('obj/'+ name + " " + tType + "_" + address + '.pkl', 'wb') as f:
+        pickle.dump(dic, f, pickle.HIGHEST_PROTOCOL)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate Inverted Index')
@@ -45,41 +38,26 @@ if __name__ == "__main__":
     args = parser.parse_args()
     csv_address = args.address
     tokenize_type = args.tokenize
-    if csv_address == 'test':
-        contents = [ 'بنا بر این من حوصله ام از مدرسه ها سر می رود',
-                    'دانشگاه صنعتی امیر کبیر ریده',
-                    'هیئت مدیره با نظام آموزشی نا آشنا هستند',
-                    'برای ثبت نام درختها نمی توانسته ام',
-                    'علی الخصوص تخت خواب ما هیچ کدام از مسخره ترین ها را نمی خواهد',
-                    'من به درختان نگاه می کنم',
-                    'شما به مدرسه ها می روید',
-                    'آن ها دیروز تلویزیون تماشا کردند',
-                    'من حوصله ام سر رفته است',
-                    'بنابراین این آخر راه است',
-                    'هیئت مدیره دانشگاه صنعتی امیر کبیر اعلام کرد ما ریدیم'
-        ]
-    else:
-        contents = fetch_column(csv_address, 'content')
+    
+    print("READING ", csv_address)
+    contents = fetch_column(csv_address, 'content')
     tokens = tokenize(tokenize_type, contents)
+    
+    print("TOKENIZING ", tokenize_type)
     if tokenize_type == 'pro':
         tokens = normilize(tokens)
         tokens = stem_list(tokens)
+    
+    print("BUILDING DICTIONARY AND INVERTED INDEX")
     dictionary = build_dictionary(tokens)
     inverted_index = build_inverted_index(tokens, dictionary)
+    
+    print("WRITING INDEX AND SCORES")
+    writeObj("INVERTED INDEX", inverted_index, tokenize_type, csv_address)
 
-    queryw = tf_idf(['خون', 'انتقال'], inverted_index)
-
-    h = Heap()    
-
+    tfidfs = []
     for i in range(len(tokens)):
-        docw = tf_idf(tokens[i], inverted_index)
-        sim = querySimilarity(queryw, docw)
-        if sim != 0:
-            h.addnSort([i, sim])
+        tfidfs.append(tf_idf(tokens[i], inverted_index))
 
-    k = 10
-    result = h.getFirstK(k)
-    titles = fetch_column(csv_address, 'title')
-    for i in range(k):
-        print(titles[result[i][0]])
-
+    writeObj("TFIDF", tfidfs, tokenize_type, csv_address)
+    
