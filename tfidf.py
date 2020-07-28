@@ -28,14 +28,15 @@ def indexElimination(documentScores):
         del(documentScores[badKeys[i]])
 
 
-def tf_idf(tokens, invIndex):
+def tf_idf(tokens, invIndex, eliminate):
     docFrequency = Counter(tokens)
     
     for term in docFrequency:
         if term in invIndex:
             docFrequency[term] = tf(docFrequency[term]) * idf(invIndex[term][0])
     normalize(docFrequency)
-    indexElimination(docFrequency)
+    if eliminate:
+        indexElimination(docFrequency)
     return docFrequency
 
 def querySimilarity(queryVector, docVector):

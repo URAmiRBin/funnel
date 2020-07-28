@@ -4,6 +4,8 @@ from stemmer import stem_list
 from fetch import fetch_column
 from tfidf import tf_idf
 import argparse
+import heapq
+import operator
 import pickle
 import csv
 
@@ -30,6 +32,31 @@ def writeObj(name, dic, tType, address):
     with open('obj/'+ name + " " + tType + "_" + address + '.pkl', 'wb') as f:
         pickle.dump(dic, f, pickle.HIGHEST_PROTOCOL)
 
+def getChampions(tokens, inverted_index):
+    tfidfs = []
+    for i in range(len(tokens)):
+        tfidfs.append(tf_idf(tokens[i], inverted_index, False))
+
+    champions_term = {}
+    champions_list = {}
+
+    # TODO: Optimize this mess
+    for term in inverted_index:
+        champions_term[term] = [None] * inverted_index[term][0]
+        for i in range(0, inverted_index[term][0]):
+            champions_term[term][i] = tfidfs[inverted_index[term][i + 1]][term]
+
+    for term in champions_term:
+        y = list(zip(*heapq.nlargest(10, enumerate(champions_term[term]), key=operator.itemgetter(1))))[0]
+        champions_list[term] = list(y)
+
+
+    for term in champions_list:
+        l = min(10, len(champions_list[term]))
+        for i in range(l):
+            champions_list[term][i] = inverted_index[term][champions_list[term][i] + 1]
+
+    return champions_list
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate Inverted Index')
@@ -57,7 +84,6 @@ if __name__ == "__main__":
 
     tfidfs = []
     for i in range(len(tokens)):
-        tfidfs.append(tf_idf(tokens[i], inverted_index))
+        tfidfs.append(tf_idf(tokens[i], inverted_index, True))
 
     writeObj("TFIDF", tfidfs, tokenize_type, csv_address)
-    
