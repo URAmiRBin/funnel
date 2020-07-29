@@ -1,6 +1,16 @@
 import re
 from fetch import fetch_column
 
+def normalize_query(query):
+    for i in range(len(query)):
+        query[i] = re.sub('ك', 'ک', query[i])
+        query[i] = re.sub('ي', 'ی', query[i])
+        query[i] = re.sub('ة', 'ه', query[i])
+        query[i] = re.sub('ؤ', 'و', query[i])
+        query[i] = re.sub('أ', 'ا', query[i])
+        query[i] = re.sub('ؤ', 'و', query[i])
+    return query
+
 def normilize(contents):
     for i in range(len(contents)):
         for j in range(len(contents[i])):

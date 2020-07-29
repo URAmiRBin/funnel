@@ -27,8 +27,9 @@ class Heap:
             else:
                 break
 
-
     def getMax(self):
+        if len(self.tree) == 1:
+            return self.tree[0]
         m = self.tree[0]
         sub = self.tree[-1]
         del(self.tree[-1])
@@ -72,6 +73,7 @@ class Heap:
         result = []
         k = min(k, len(self.tree))
         for i in range(k):
+            print(i)
             result.append(self.getMax())
         return result
 

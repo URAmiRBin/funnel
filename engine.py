@@ -39,7 +39,7 @@ def getChampions(tokens, inverted_index):
 def runEngine(tokenizer_type, address):
     print("RUNNING ENGINE ...")
     inverted_index = load_obj("INVERTED INDEX " + tokenizer_type + "_" + address)
-    tfidfs = load_obj("TFIDF " + tokenize_type + "_" + address)
+    tfidfs = load_obj("CHAMPIONS " + tokenize_type + "_" + address)
     
     query = ""
 
@@ -64,6 +64,7 @@ def runEngine(tokenizer_type, address):
         titles = fetch_column(address, 'title')
         for i in range(k):
             print(titles[result[i][0]][::-1])
+
         
 if __name__ == "__main__":
     tokenize_type = sys.argv[2]
